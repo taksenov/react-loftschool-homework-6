@@ -18,6 +18,4 @@ export default combineReducers({
     orders
 });
 
-// export const getCommentsCounts = state => state.comments.count;
-// export const getComments = state => state.comments.comments;
-// export const getFirst10Comments = state => state.comments.comments.slice(0, 10);
+export const getMarketOrders = state => state.market.orders;
