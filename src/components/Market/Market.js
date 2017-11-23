@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import { createOrder, moveOrderToFarm } from '../../actions/marketActions';
 import { getMarketOrders } from '../../reducers/market';
 
@@ -6,7 +8,6 @@ import Order from '../Order';
 
 import './Market.css';
 
-import { connect } from 'react-redux';
 let id = 0;
 const getId = () => {
     id += 1;
@@ -37,10 +38,6 @@ const getNewOrder = () => {
 };
 
 export class Market extends Component {
-    // constructor(props) {
-    //     super(props);
-    // }
-
     createNewOrder = () => {
         this.props.createOrder(getNewOrder());
     }; //createNewOrder

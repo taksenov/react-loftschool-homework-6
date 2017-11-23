@@ -20,6 +20,15 @@ const profit = (state = 0, action) => {
     }
 };
 
+const marketExpanse = (state = 0, action) => {
+    switch (action.type) {
+        case CREATE_ORDER:
+            return state + 20;
+        default:
+            return state;
+    }
+};
+
 const farmExpanse = (state = 0, action) => {
     switch (action.type) {
         case MOVE_ORDER_TO_FARM:
@@ -32,7 +41,8 @@ const farmExpanse = (state = 0, action) => {
 export default combineReducers({
     deliveryExpanse,
     profit,
-    farmExpanse
+    farmExpanse,
+    marketExpanse
 });
 
 export const getBudget = state => state.budget;

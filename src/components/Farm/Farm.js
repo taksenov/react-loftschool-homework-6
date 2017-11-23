@@ -1,50 +1,50 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { moveOrderToCustomer } from '../../actions/farmActions';
+import { getFarmOrders } from '../../reducers/farm';
+
+import Order from '../Order';
+
 import './Farm.css';
 
-import { connect } from 'react-redux';
-let id = 0;
-const getId = () => {
-    id += 1;
-    return id;
-};
-export const vegetables = [
-    'Капуста',
-    'Редиска',
-    'Огурцы',
-    'Морковь',
-    'Горох',
-    'Баклажан',
-    'Тыква',
-    'Чеснок',
-    'Лук',
-    'Перец',
-    'Картофель',
-    'Редька'
-];
-
-const getNewOrder = () => {
-    return {
-        id: getId(),
-        name: vegetables[Math.floor(Math.random() * vegetables.length)],
-        price: 100 + Math.floor(Math.random() * 100),
-        createdAt: new Date()
-    };
-};
-
 export class Farm extends Component {
+    moveLastOrderToCustomer = () => {
+        const { orders } = this.props;
+
+        this.props.moveOrderToCustomer(orders[orders.length - 1]);
+    }; //moveLastOrderToCustomer
+
     render() {
+        const { orders } = this.props;
+
         return (
             <div className="farm">
                 <h2>Производство на ферме</h2>
-                <button disabled="">Отправить урожай клиенту</button>
-                <div />
+                <button
+                    onClick={this.moveLastOrderToCustomer}
+                    disabled={!orders.length}
+                >
+                    Отправить урожай клиенту
+                </button>
+                <div className="order-list">
+                    {orders.map(order => (
+                        <li className="order-item" key={order.id}>
+                            <Order order={order} />
+                        </li>
+                    ))}
+                </div>
             </div>
         );
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    orders: getFarmOrders(state)
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    moveOrderToCustomer
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Farm);
