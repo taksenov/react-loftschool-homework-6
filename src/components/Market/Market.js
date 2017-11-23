@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { createOrder, moveOrderToFarm } from '../../actions/marketActions';
+import { getMarketOrders } from '../../reducers/market';
+
+import Order from '../Order';
+
 import './Market.css';
-import '../Order/Order.css';
 
 import { connect } from 'react-redux';
 let id = 0;
@@ -33,67 +37,57 @@ const getNewOrder = () => {
 };
 
 export class Market extends Component {
+    // constructor(props) {
+    //     super(props);
+    // }
+
+    createNewOrder = () => {
+        this.props.createOrder(getNewOrder());
+    }; //createNewOrder
+
+    moveLastOrderToFarm = () => {
+        const { orders } = this.props;
+
+        this.props.moveOrderToFarm(orders[orders.length - 1]);
+    }; //moveLastOrderToFarm
+
     render() {
+        const { orders } = this.props;
+
         return (
             <div className="market">
                 <h2>Новые заказы в магазине</h2>
-                <button className="new-orders__create-button">
+                <button
+                    className="new-orders__create-button"
+                    onClick={this.createNewOrder}
+                >
                     Создать заказ
                 </button>
-                <button disabled="">Отправить заказ на ферму</button>
+                <button
+                    onClick={this.moveLastOrderToFarm}
+                    disabled={!orders.length}
+                >
+                    Отправить заказ на ферму
+                </button>
                 <div className="order-list">
-                    <div className="order">
-                        <div className="order__upper">
-                            <p className="p--order">Название: Чеснок</p>
-                            <p className="p--order">Цена: 183</p>
-                        </div>
-                        <div className="order__lower">
-                            <p className="p--order">
-                                Создан: 15:38:18 GMT+0500 (RTZ 4 (зима))
-                            </p>
-                        </div>
-                    </div>
-                    <div className="order">
-                        <div className="order__upper">
-                            <p className="p--order">Название: Горох</p>
-                            <p className="p--order">Цена: 103</p>
-                        </div>
-                        <div className="order__lower">
-                            <p className="p--order">
-                                Создан: 15:38:18 GMT+0500 (RTZ 4 (зима))
-                            </p>
-                        </div>
-                    </div>
-                    <div className="order">
-                        <div className="order__upper">
-                            <p className="p--order">Название: Огурцы</p>
-                            <p className="p--order">Цена: 129</p>
-                        </div>
-                        <div className="order__lower">
-                            <p className="p--order">
-                                Создан: 15:38:18 GMT+0500 (RTZ 4 (зима))
-                            </p>
-                        </div>
-                    </div>
-                    <div className="order">
-                        <div className="order__upper">
-                            <p className="p--order">Название: Чеснок</p>
-                            <p className="p--order">Цена: 168</p>
-                        </div>
-                        <div className="order__lower">
-                            <p className="p--order">
-                                Создан: 15:38:18 GMT+0500 (RTZ 4 (зима))
-                            </p>
-                        </div>
-                    </div>
+                    {orders.map(order => (
+                        <li className="order-item" key={order.id}>
+                            <Order order={order} />
+                        </li>
+                    ))}
                 </div>
             </div>
         );
-    }
+    } //render
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    orders: getMarketOrders(state)
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    createOrder,
+    moveOrderToFarm
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Market);
