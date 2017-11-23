@@ -9,7 +9,7 @@ export class Budget extends Component {
     render() {
         const { budget } = this.props;
 
-        console.log('budget', budget);
+        console.log('budget', this.props);
 
         return (
             <div className="budget">
